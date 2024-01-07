@@ -9,6 +9,7 @@ from aiogram.filters.command import Command
 from aiogram.enums import ParseMode
 from aiogram.types import KeyboardButton, InlineKeyboardButton, FSInputFile
 from .keyboards import kb
+from .text import weather_1h
 
 
 
@@ -41,6 +42,28 @@ async def proccess_callback_button(message: types.Message):
         response_to_user: str = f"Вы выбрали город: {message.text}"
         photo = FSInputFile(city)
         await message.answer_photo(photo=photo, caption=response_to_user)
+
+        await weather_data(message.text, message.chat.id)
+
+async def weather_data(name_city: str, chat_id: int):
+    """
+    Обрабатывает данные о погоде, вывод
+    :return:
+    """
+    forecast_weather: api.Weather = api.Weather()
+    city_weather_data: tuple = forecast_weather.get_city(name_city)
+
+    if city_weather_data:
+        data_weather_for_user: str = ""
+        all_text_from_1h: list = weather_1h.weather_data
+        for line in range(len(all_text_from_1h)):
+            data_weather_for_user += all_text_from_1h[line] + " " + city_weather_data[line]
+        await weather_bot.send_message(chat_id=chat_id, text=data_weather_for_user)
+    else:
+        await weather_bot.send_message(chat_id=chat_id, text="К сожалению ваш запрос не удался")
+
+
+
 
 async def main():
     await dp_w.start_polling(weather_bot)
