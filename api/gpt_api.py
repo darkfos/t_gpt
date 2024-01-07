@@ -13,7 +13,7 @@ class Weather:
             URL - Сервис погодных услуг
         """
         config = ConfigParser()
-        config.read(".gitignore")
+        config.read("secret.ini")
 
         self.__API_KEY = config.get("auth", "API_KEY")
         self.__URL = "http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/"
