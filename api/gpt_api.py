@@ -1,11 +1,21 @@
 import datetime
-
 import requests
+
+from configparser import ConfigParser
 
 class Weather:
 
     def __init__(self):
-        self.__API_KEY = "AqMAKLeaDEXUrlsVqsrYl3gzpGWS3rbx"
+        """
+            Инициализация данных.
+
+            __API_KEY - АПИ ключ к прогнозам.
+            URL - Сервис погодных услуг
+        """
+        config = ConfigParser()
+        config.read("secret.ini")
+
+        self.__API_KEY = config.get("auth", "API_KEY")
         self.__URL = "http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/"
 
         self.params = {
@@ -20,9 +30,18 @@ class Weather:
         }
 
     def get_all_cities(self):
+        """
+        Вовзращает список всех городов и их идентификаторы
+        :return:
+        """
         return self.cities
 
     def get_city(self, name_city: str):
+        """
+        Возвращает погодные данные указанного города
+        :param name_city:
+        :return:
+        """
         if name_city in self.cities:
             parameters = {
                 "apikey": self.__API_KEY,
@@ -46,5 +65,10 @@ class Weather:
             return None
 
     def convert_fr_to_cl(self, fr: float):
+        """
+        Перевод с системы Фаренгейта в Цельсий
+        :param fr:
+        :return:
+        """
         temperature_cl: float = (fr - 32) * (5/9)
         return temperature_cl
