@@ -24,9 +24,9 @@ class Weather:
         }
 
         self.cities = {
-            "Москва": "294021",
-            "Ростов-на-Дону": "295146",
-            "Санкт-Петербург": "295212",
+            "Москва": ["294021", "bot/img/Moskwa.jpg"],
+            "Ростов-на-Дону": ["295146", "bot/img/rostov-na-donu.jpg"],
+            "Санкт-Петербург": ["295212", "bot/img/sant-petesburg.jpg"],
         }
 
     def get_all_cities(self):
