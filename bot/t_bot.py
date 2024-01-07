@@ -2,8 +2,8 @@ import asyncio
 import logging
 import api
 import bot.text
+import config
 
-from configparser import ConfigParser
 from aiogram import Dispatcher, Bot, types, F
 from aiogram.filters.command import Command
 from aiogram.enums import ParseMode
@@ -12,13 +12,8 @@ from .keyboards import kb
 from .text import weather_1h
 
 
-
 logging.basicConfig(level=logging.INFO)
-
-config = ConfigParser()
-config.read("config.ini")
-
-weather_bot = Bot(token=config.get("auth", "TG_API_KEY"))
+weather_bot = Bot(token=config.TG_API_KEY)
 
 dp_w = Dispatcher(bot=weather_bot)
 
@@ -61,8 +56,6 @@ async def weather_data(name_city: str, chat_id: int):
         await weather_bot.send_message(chat_id=chat_id, text=data_weather_for_user)
     else:
         await weather_bot.send_message(chat_id=chat_id, text="К сожалению ваш запрос не удался")
-
-
 
 
 async def main():

@@ -1,1 +1,1 @@
-from .gpt_api import Weather
+from .forecast_weather import Weather

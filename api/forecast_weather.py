@@ -1,7 +1,6 @@
 import datetime
 import requests
-
-from configparser import ConfigParser
+import config
 
 class Weather:
 
@@ -12,10 +11,8 @@ class Weather:
             __API_KEY - АПИ ключ к прогнозам.
             URL - Сервис погодных услуг
         """
-        config = ConfigParser()
-        config.read("config.ini")
 
-        self.__API_KEY = config.get("auth", "API_KEY")
+        self.__API_KEY = config.API_KEY
         self.__URL = "http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/"
 
         self.params = {
