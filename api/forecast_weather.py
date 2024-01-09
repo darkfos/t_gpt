@@ -45,7 +45,7 @@ class Weather:
                 "language": "ru"
             }
 
-            request: str = requests.get(self.__URL+name_city, params=parameters).json()
+            request: str = requests.get(self.__URL+self.cities[name_city][0], params=parameters).json()
             try:
                 temp_c = self.convert_fr_to_cl(request[0]["Temperature"].get("Value"))
                 weather_state: str = request[0]["IconPhrase"]

@@ -3,6 +3,7 @@ import logging
 import api
 import bot.text
 import config
+import emoji
 
 from aiogram import Dispatcher, Bot, types, F
 from aiogram.filters.command import Command
@@ -45,6 +46,7 @@ async def weather_data(name_city: str, chat_id: int):
     Обрабатывает данные о погоде, вывод
     :return:
     """
+    print(name_city, chat_id)
     forecast_weather: api.Weather = api.Weather()
     city_weather_data: tuple = forecast_weather.get_city(name_city)
 
@@ -52,7 +54,7 @@ async def weather_data(name_city: str, chat_id: int):
         data_weather_for_user: str = ""
         all_text_from_1h: list = weather_1h.weather_data
         for line in range(len(all_text_from_1h)):
-            data_weather_for_user += all_text_from_1h[line] + " " + city_weather_data[line]
+            data_weather_for_user += emoji.emojize(all_text_from_1h[line]) + " " + str(city_weather_data[line]) + "\n\n"
         await weather_bot.send_message(chat_id=chat_id, text=data_weather_for_user)
     else:
         await weather_bot.send_message(chat_id=chat_id, text="К сожалению ваш запрос не удался")
