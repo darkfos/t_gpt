@@ -8,8 +8,9 @@ import emoji
 from aiogram import Dispatcher, Bot, types, F
 from aiogram.filters.command import Command
 from aiogram.enums import ParseMode
-from aiogram.types import KeyboardButton, InlineKeyboardButton, FSInputFile
-from .keyboards import kb
+from aiogram.types import KeyboardButton, InlineKeyboardButton, FSInputFile, InlineKeyboardMarkup
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+from .keyboards import kb, func_about_city_kb
 from .text import weather_1h
 
 
@@ -28,6 +29,14 @@ async def help_command(message: types.Message):
 @dp_w.message(Command("start"))
 async def start_command(message: types.Message):
     await message.answer("Выберите ваш <b>город</b>", reply_markup=kb.start_kb, parse_mode="HTML")
+
+
+@dp_w.message(Command("name_city"))
+async def about_city_command(message: types.Message):
+    message_text: str = "Выберите <b>город</b>"
+    keyboard = func_about_city_kb()
+    await message.answer(message_text, reply_markup=keyboard.as_markup(), parse_mode="HTML")
+
 
 
 @dp_w.message()

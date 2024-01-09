@@ -47,7 +47,7 @@ class Weather:
 
             request: str = requests.get(self.__URL+self.cities[name_city][0], params=parameters).json()
             try:
-                temp_c = self.convert_fr_to_cl(request[0]["Temperature"].get("Value"))
+                temp_c = round(self.convert_fr_to_cl(request[0]["Temperature"].get("Value")), 2)
                 weather_state: str = request[0]["IconPhrase"]
                 date_time: datetime = datetime.datetime.now()
                 is_daylight: str = "День" if request[0]["IsDaylight"] else "Ночь"
