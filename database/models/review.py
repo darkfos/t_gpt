@@ -12,3 +12,11 @@ async_session = async_sessionmaker(engine)
 
 class Base(AsyncAttrs, DeclarativeBase):
     pass
+
+
+class Review(Base):
+    __tablename__ = "review"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    tg_id: Mapped[int] = mapped_column(BigInteger)
+    review_number: Mapped[int]
