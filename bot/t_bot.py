@@ -11,7 +11,7 @@ from aiogram.enums import ParseMode
 from aiogram.types import KeyboardButton, InlineKeyboardButton, FSInputFile, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from .keyboards import kb, func_about_city_kb
-from .text import weather_1h
+from .text import weather_1h, about_of_city
 
 
 logging.basicConfig(level=logging.INFO)
@@ -38,6 +38,20 @@ async def about_city_command(message: types.Message):
     await message.answer(message_text, reply_markup=keyboard.as_markup(), parse_mode="HTML")
 
 
+@dp_w.callback_query(F.data.endswith("_btn"))
+async def callback_response(callback: types.CallbackQuery):
+    data_city: tuple | None = api.City(callback.message.text).api_get_info_of_city()
+    message_to_user: str = ""
+
+    if data_city:
+
+        for line in range(len(about_of_city)):
+            message_to_user += (emoji.emojize(about_of_city[line], language="fr") + data_city[line]) + "\n\n"
+        await callback.message.answer(message_to_user)
+
+    else:
+        await callback.message.answer("Вы исчерпали все попытки за сегодня.")
+
 
 @dp_w.message()
 async def proccess_callback_button(message: types.Message):
@@ -55,7 +69,6 @@ async def weather_data(name_city: str, chat_id: int):
     Обрабатывает данные о погоде, вывод
     :return:
     """
-    print(name_city, chat_id)
     forecast_weather: api.Weather = api.Weather()
     city_weather_data: tuple = forecast_weather.get_city(name_city)
 
