@@ -5,11 +5,12 @@ import emoji
 from aiogram import types, F
 from aiogram.filters.command import Command
 from aiogram.types import FSInputFile
-from .keyboards import kb, func_about_city_kb
-from .text import weather_1h, about_of_city
+from .keyboards import kb, func_about_city_kb, func_neighbors_cities
+from .text import weather_1h, about_of_city, neighbors_city
 from aiogram import Router
 
 router = Router()
+
 
 @router.message(Command("help"))
 async def help_command(message: types.Message):
@@ -29,22 +30,39 @@ async def about_city_command(message: types.Message):
     await message.answer(message_text, reply_markup=keyboard.as_markup(), parse_mode="HTML")
 
 
-@router.callback_query(F.data.endswith("_btn"))
-async def callback_response(callback: types.CallbackQuery):
-    data_city: tuple | None = api.City(callback.data[:-4]).api_get_info_of_city()
-    message_to_user: str = ""
-    if data_city:
+@router.message(Command("neighbors"))
+async def neighbors_cities(message: types.Message):
+    message_text: str = "Выберите интересующий ваc <b>город</b>"
+    keyboard_neighbors_cities = func_neighbors_cities()
+    await message.answer(message_text, reply_markup=keyboard_neighbors_cities.as_markup(), parse_mode="HTML")
 
-        for line in range(len(about_of_city)):
-            message_to_user += (emoji.emojize(about_of_city[line], language="fr") + data_city[line]) + "\n\n"
-        await callback.message.answer(message_to_user)
 
+@router.callback_query()
+async def callback_response_info_city(callback: types.CallbackQuery):
+    if callback.data.endswith("_btn"):
+        data_city: tuple | None = api.City(callback.data[:-4]).api_get_info_of_city()
+        message_to_user: str = ""
+        if data_city:
+
+            for line in range(len(about_of_city)):
+                message_to_user += (emoji.emojize(about_of_city[line], language="fr") + data_city[line]) + "\n\n"
+            await callback.message.answer(message_to_user)
+
+        else:
+            await callback.message.answer("Вы исчерпали все попытки за сегодня.")
     else:
-        await callback.message.answer("Вы исчерпали все попытки за сегодня.")
+        all_city_info: list | None = api.CityNeighbors(callback.data[:-4]).get_neighbors_city()
+        message_to_user: str = "Список ближайших городов: \n\n\n"
+        if all_city_info:
+            for city in range(len(all_city_info)):
+                message_to_user += emoji.emojize(neighbors_city + all_city_info[city] + "\n\n", language="en")
+            await callback.message.reply(message_to_user)
+        else:
+            return callback.message.answer("Вы исчерпали все попытки за сегодня.")
 
 
 @router.message()
-async def proccess_callback_button(message: types.Message):
+async def process_callback_button(message: types.Message):
     all_cities: dict = api.Weather().get_all_cities()
     city_text: str = message.text
     if city_text in all_cities:
