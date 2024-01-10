@@ -25,6 +25,9 @@ class Review(Base):
         self.tg_id = tg_id
         self.review_number = review_number
 
+    def __repr__(self):
+        return f"tg_id: {self.tg_id}, id_review: {self.id}, review_score: {self.review_number}"
+
 
 async def create_db():
     async with engine.begin() as connection:
