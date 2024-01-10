@@ -21,11 +21,14 @@ class City:
             region: str = request[0]["Region"]["LocalizedName"]
             country: str = request[0]["Country"]["LocalizedName"]
             type_localization: str = request[0]["AdministrativeArea"]["LocalizedType"]
-            time_zone: str = request[0]["TimeZone"]["Name"]
+            time_zone: str = request[0]["TimeZone"]["Name"] + "\n\n"
+            latitude_city: str = str(request[0]["GeoPosition"]["Latitude"])
+            longtitude_city: str = str(request[0]["GeoPosition"]["Longitude"])
+
         except Exception:
             return None
 
-        return type_colony, region, country, type_localization, time_zone
+        return type_colony, region, country, type_localization, time_zone, latitude_city, longtitude_city
 
     def __name__(self) -> str:
         return "Город: " + self.name_city
