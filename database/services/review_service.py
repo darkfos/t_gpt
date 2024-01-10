@@ -18,14 +18,12 @@ async def get_one_reviews(id_tg: BigInteger) -> tuple:
 
 async def add_one_reviews(id_tg: BigInteger, score_from_user: int):
     async with async_session() as session:
-        data_result = await session.add((id_tg, score_from_user))
-        session.commit()
+        object_to_add: Review = Review(id_tg, score_from_user)
+        data_result = session.add(object_to_add)
+        await session.commit()
 
 
 async def del_one_reviews(id_tg: BigInteger):
     async with async_session() as session:
-        data_result = await session.execute(select(Review).where(Review.tg_id.is_(id_tg)))
-        all_reviews_for_unique_id: tuple = data_result.scalars()
-
-        del_results = await session.delete(all_reviews_for_unique_id)
-        session.commit()
+        del_unique_tg_id = await session.execute(delete(Review).where(Review.tg_id == id_tg))
+        await session.commit()
