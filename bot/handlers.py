@@ -31,9 +31,8 @@ async def about_city_command(message: types.Message):
 
 @router.callback_query(F.data.endswith("_btn"))
 async def callback_response(callback: types.CallbackQuery):
-    data_city: tuple | None = api.City(callback.message.text).api_get_info_of_city()
+    data_city: tuple | None = api.City(callback.data[:-4]).api_get_info_of_city()
     message_to_user: str = ""
-
     if data_city:
 
         for line in range(len(about_of_city)):
@@ -47,13 +46,14 @@ async def callback_response(callback: types.CallbackQuery):
 @router.message()
 async def proccess_callback_button(message: types.Message):
     all_cities: dict = api.Weather().get_all_cities()
-    if message.text in all_cities:
+    city_text: str = message.text
+    if city_text in all_cities:
         city: str = all_cities.get(message.text)[-1]
         response_to_user: str = f"Вы выбрали город: {message.text}"
         photo = FSInputFile(city)
         await message.answer_photo(photo=photo, caption=response_to_user)
 
-        result_data: str = await weather_data(message.text)
+        result_data: str = await weather_data(city_text)
         await message.answer(result_data)
 
 async def weather_data(name_city: str) -> str:
