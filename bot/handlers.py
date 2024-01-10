@@ -13,8 +13,8 @@ router = Router()
 
 @router.message(Command("help"))
 async def help_command(message: types.Message):
-    photo: FSInputFile = FSInputFile("bot/img/free-icon-weather-831268.png")
-    await message.answer_photo(photo=photo, caption=bot.text[0], parse_mode="HTML")
+    photo: FSInputFile = FSInputFile("bot/img/main_icon.jpg")
+    await message.answer_photo(photo=photo, caption=emoji.emojize(bot.text[0] + emoji.emojize(bot.text[1]), language="en"), parse_mode="HTML")
 
 
 @router.message(Command("start"))
