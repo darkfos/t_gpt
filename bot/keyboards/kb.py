@@ -14,10 +14,20 @@ start_kb = ReplyKeyboardMarkup(
     one_time_keyboard=True
 )
 
+
 def func_about_city_kb():
     about_city_kb = InlineKeyboardBuilder()
 
     for city_name in list(Weather().get_all_cities().keys()):
-        about_city_kb.row(InlineKeyboardButton(text=city_name, callback_data=city_name + "_btn"))
+        about_city_kb.row(InlineKeyboardButton(text=city_name, callback_data=city_name+"_btn"))
 
     return about_city_kb
+
+
+def func_neighbors_cities():
+    all_cities: InlineKeyboardBuilder = InlineKeyboardBuilder()
+
+    for city_name in list(Weather().get_all_cities().keys()):
+        all_cities.row(InlineKeyboardButton(text=city_name, callback_data=city_name+"_inb"))
+
+    return all_cities
