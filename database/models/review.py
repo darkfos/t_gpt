@@ -4,7 +4,6 @@ from sqlalchemy import BigInteger
 from sqlalchemy.orm import relationship, Mapped, mapped_column, DeclarativeBase
 from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
 
-print(SQL_ALCHEMY_URL)
 #Логирование, подключение
 engine = create_async_engine(SQL_ALCHEMY_URL, echo=True)
 
