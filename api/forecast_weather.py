@@ -1,6 +1,7 @@
 import datetime
 import requests
 import config
+import api
 
 class Weather:
 
@@ -20,18 +21,12 @@ class Weather:
             "language": "ru"
         }
 
-        self.cities = {
-            "Москва": ["294021", "bot/img/Moskwa.jpg"],
-            "Ростов-на-Дону": ["295146", "bot/img/rostov-na-donu.jpg"],
-            "Санкт-Петербург": ["295212", "bot/img/sant-petesburg.jpg"],
-        }
-
     def get_all_cities(self):
         """
         Вовзращает список всех городов и их идентификаторы
         :return:
         """
-        return self.cities
+        return api.cities
 
     def get_city(self, name_city: str):
         """
@@ -39,13 +34,13 @@ class Weather:
         :param name_city:
         :return:
         """
-        if name_city in self.cities:
+        if name_city in api.cities:
             parameters = {
                 "apikey": self.__API_KEY,
                 "language": "ru"
             }
 
-            request: str = requests.get(self.__URL+self.cities[name_city][0], params=parameters).json()
+            request: str = requests.get(self.__URL+api.cities[name_city][0], params=parameters).json()
             try:
                 temp_c = round(self.convert_fr_to_cl(request[0]["Temperature"].get("Value")), 2)
                 weather_state: str = request[0]["IconPhrase"]
