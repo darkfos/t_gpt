@@ -5,6 +5,7 @@ import config
 
 from bot.handlers import router
 from aiogram import Dispatcher, Bot
+from database import add_one_reviews, del_one_reviews
 
 import database
 
@@ -21,4 +22,3 @@ async def run_project():
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     asyncio.run(run_project())
-
