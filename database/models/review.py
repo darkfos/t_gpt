@@ -19,14 +19,18 @@ class Review(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     tg_id: Mapped[int] = mapped_column(BigInteger)
-    review_number: Mapped[int]
+    name: Mapped[str]
+    age: Mapped[int]
+    review_text: Mapped[str]
 
-    def __init__(self, tg_id, review_number):
+    def __init__(self, tg_id, review_text: Mapped[str], name: Mapped[str], age: Mapped[int]):
         self.tg_id = tg_id
-        self.review_number = review_number
+        self.review_text = review_text
+        self.name = name
+        self.age = age
 
     def __repr__(self):
-        return f"tg_id: {self.tg_id}, id_review: {self.id}, review_score: {self.review_number}"
+        return f"tg_id: {self.tg_id}, id_review: {self.id}, name: {self.name}, age: {self.age} review_text: {self.review_text}"
 
 
 async def create_db():
