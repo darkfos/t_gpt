@@ -31,3 +31,11 @@ def func_neighbors_cities():
         all_cities.row(InlineKeyboardButton(text=city_name, callback_data=city_name+"_inb"))
 
     return all_cities
+
+
+def review_text_butt():
+    button_response: InlineKeyboardBuilder = InlineKeyboardBuilder()
+    button_response.row(InlineKeyboardButton(text="Да", callback_data="Yes_nbt"))
+    button_response.row(InlineKeyboardButton(text="Нет", callback_data="No_nbt"))
+
+    return button_response
