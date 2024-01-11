@@ -31,5 +31,10 @@ class City:
         return type_colony, region, country, type_localization, time_zone, latitude_city, longtitude_city
 
     def __name__(self) -> str:
-        return "Город: " + self.name_city
+        return "City"
 
+    def __repr__(self):
+        return "Класс для получения информации о городе"
+
+    def __del__(self):
+        print(f"Объект: {self.__name__()} был удалён.")

@@ -3,6 +3,7 @@ import requests
 import config
 import api
 
+
 class Weather:
 
     def __init__(self):
@@ -40,7 +41,7 @@ class Weather:
                 "language": "ru"
             }
 
-            request: str = requests.get(self.__URL+api.cities[name_city][0], params=parameters).json()
+            request: str = requests.get(self.__URL + api.cities[name_city][0], params=parameters).json()
             try:
                 temp_c = round(self.convert_fr_to_cl(request[0]["Temperature"].get("Value")), 2)
                 weather_state: str = request[0]["IconPhrase"]
@@ -59,5 +60,14 @@ class Weather:
         :param fr:
         :return:
         """
-        temperature_cl: float = (fr - 32) * (5/9)
+        temperature_cl: float = (fr - 32) * (5 / 9)
         return temperature_cl
+
+    def __name__(self):
+        return "Weather"
+
+    def __repr__(self):
+        return "Класс для получения информации о погоде"
+
+    def __del__(self):
+        print(f"Объект: {self.__name__()} был удалён.")

@@ -22,3 +22,9 @@ class CityNeighbors:
 
     def __repr__(self):
         return "Код города: %s" % self.code_city
+
+    def __name__(self):
+        return "CityNeighbors"
+
+    def __del__(self):
+        print(f"Объект: {self.__name__()} был удалён.")
