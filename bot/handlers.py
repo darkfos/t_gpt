@@ -45,7 +45,7 @@ async def callback_response_info_city(callback: types.CallbackQuery):
         if data_city:
 
             for line in range(len(about_of_city)):
-                message_to_user += (emoji.emojize(about_of_city[line], language="fr") + data_city[line]) + "\n\n"
+                message_to_user += (emoji.emojize(about_of_city[line], language="en") + data_city[line]) + "\n\n"
             await callback.message.answer(message_to_user)
 
         else:

@@ -1,11 +1,9 @@
 import asyncio
-import bot
 import logging
 import config
 
 from bot.handlers import router
 from aiogram import Dispatcher, Bot
-from database import add_one_reviews, del_one_reviews
 
 import database
 
