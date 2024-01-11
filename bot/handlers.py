@@ -7,6 +7,7 @@ from aiogram.filters.command import Command
 from aiogram.types import FSInputFile
 from .keyboards import kb, func_about_city_kb, func_neighbors_cities
 from .text import weather_1h, about_of_city, neighbors_city
+from aiogram.fsm.storage import memory
 from aiogram import Router
 
 router = Router()
