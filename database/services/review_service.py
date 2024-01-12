@@ -1,5 +1,5 @@
 from sqlalchemy import select, insert, delete, BigInteger
-from database.create_all_table import create_db, async_session
+from database.create_all_table import async_session
 from database import Review
 
 
