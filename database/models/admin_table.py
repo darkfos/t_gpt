@@ -16,4 +16,4 @@ class AdminTable(Base):
         self.password = password
 
     def __repr__(self):
-        return f"Telegram name: {self.tg_name}, id: {self.tg_id}"
+        return f"{self.tg_name}, {self.tg_id}, {self.password}"

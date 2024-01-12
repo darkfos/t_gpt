@@ -7,7 +7,6 @@ from aiogram import Router
 from bot import review_text_butt
 from bot import FormReview
 from database.services import review_service
-from database.models import review_table
 
 
 fsm_router = Router()
