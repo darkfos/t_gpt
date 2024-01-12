@@ -18,10 +18,8 @@ async def run_project():
     dp_w = Dispatcher(bot=weather_bot)
     dp_w.include_routers(
         fsm_router,
-        admin_router,
-        router,
+        router, admin_router
     )
-
     await dp_w.start_polling(weather_bot)
 
 
