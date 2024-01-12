@@ -3,14 +3,14 @@ import logging
 import config
 
 from bot.handlers import router
-from bot.quest_review import fsm_router
+from bot.handlers.quest_review import fsm_router
 from aiogram import Dispatcher, Bot
+from database import create_db
 
-import database
 
 
 async def run_project():
-    await database.create_db()
+    await create_db()
 
     # Бот
     weather_bot = Bot(token=config.TG_API_KEY)

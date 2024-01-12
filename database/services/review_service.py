@@ -1,5 +1,6 @@
 from sqlalchemy import select, insert, delete, BigInteger
-from database import create_db, async_session, Review
+from database.create_all_table import create_db, async_session
+from database import Review
 
 
 async def get_all_reviews() -> tuple:
