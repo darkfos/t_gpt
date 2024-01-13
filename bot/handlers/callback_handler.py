@@ -20,7 +20,7 @@ fsm_router = Router()
 async def callback_review_response(callback_review: CallbackQuery, state=FSMContext):
     if callback_review.data == "Yes_nbt":
         await state.set_state(FormReview.name)
-        await callback_review.message.answer("Введите пожалуйста ваше имя")
+        await callback_review.message.answer("Введите пожалуйста ваше <b>имя</b>", parse_mode="HTML")
     else:
         await callback_review.answer("Форма отправки отзыва отменена.")
         await state.clear()
@@ -38,7 +38,7 @@ async def callback_response_info_city(callback: CallbackQuery):
             await callback.message.answer(message_to_user)
 
         else:
-            await callback.message.answer("Вы исчерпали все попытки за сегодня.")
+            await callback.message.answer(emoji.emojize(":bell: Вы исчерпали все попытки за сегодня.", language="en"))
     else:
         all_city_info: list | None = api.CityNeighbors(callback.data[:-4]).get_neighbors_city()
         message_to_user: str = "Список ближайших городов: \n\n\n"

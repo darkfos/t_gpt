@@ -20,18 +20,18 @@ async def password_admin(message: Message, state=FSMContext):
     password_admin: str = message.text
     response_to_admin_table = (await admin_service.get_one_admin(int(message.from_user.id)))[0][-1]
     if response_to_admin_table.password == password_admin:
-        await message.answer("Успешно. Добро пожаловать в админ панель %s" % message.from_user.full_name)
+        await message.answer(emoji.emojize(":check_mark_button: Успешно. Добро пожаловать в админ панель %s" % message.from_user.full_name), language="en")
         await state.set_state(FormAdmin.sel_option)
-        await message.answer("Выберите пункт меню %s" % message.from_user.full_name, reply_markup=get_admin_bt())
+        await message.answer(emoji.emojize(":scroll: Выберите пункт <b>меню</b> %s" % message.from_user.full_name, reply_markup=get_admin_bt()), language="en", parse_mode="HTML")
     else:
-        await message.answer("Пароль неверен")
+        await message.answer(":cross_mark: Пароль <u>неверен</u>", language="en", parse_mode="HTML")
 
 
 @admin_router.message(FormReview.name)
 async def name_user(message: Message, state: FSMContext):
     await state.update_data(name=message.text)
     await state.set_state(FormReview.age)
-    await message.answer("Введите свой возраст")
+    await message.answer(emoji.emojize(":check_mark_button: Введите свой возраст"), language="en")
 
 
 @admin_router.message(FormReview.age)
@@ -39,15 +39,15 @@ async def age_user(message: Message, state: FSMContext):
     if message.text.isdigit():
         await state.update_data(age=int(message.text))
         await state.set_state(FormReview.review_text)
-        await message.answer("Замечательно, теперь напишите свой отзыв")
+        await message.answer(emoji.emojize(":check_mark_button: Замечательно, теперь напишите свой отзыв"), language="en")
     else:
-        await message.answer("Неверно был введён возраст")
+        await message.answer(emoji.emojize(":cross_mark: Неверно был введён возраст"), language="en")
 
 
 @admin_router.message(FormReview.review_text)
 async def review_text_from_user(message: Message, state: FSMContext):
     if await state.update_data(review_text=message.text):
-        await message.answer("Успешно! Спасибо за ваш отзыв.")
+        await message.answer(emoji.emojize(":check_mark_button: Успешно! Спасибо за ваш отзыв."), language="en")
         state_data = await state.get_data()
         await state.clear()
         data_for_user: list = [state_data.get(key) for key in state_data.keys()]
@@ -56,11 +56,11 @@ async def review_text_from_user(message: Message, state: FSMContext):
         result = await review_service.get_one_reviews(data_for_user[0])
         if len(result) == 0:
             await review_service.add_one_reviews(*review_obj)
-            await message.answer(f"{message.from_user.full_name} ваш отзыв был успешно отправлен!")
+            await message.answer(emoji.emojize(f":check_mark_button: {message.from_user.full_name} ваш отзыв был успешно отправлен!"), language="en")
         else:
-            await message.answer(f"{message.from_user.full_name} к сожалению вы уже отправляли свой отзыв")
+            await message.answer(f"<b>{message.from_user.full_name}</b> к сожалению вы уже отправляли свой отзыв", parse_mode="HTML")
     else:
-        await message.answer("Ошибка, попробуйте ещё раз")
+        await message.answer(emoji.emojize(":cross_mark: Ошибка, попробуйте ещё раз"), language="en")
 
 
 @admin_router.message(FormAdmin.sel_option)
@@ -69,11 +69,11 @@ async def sel_option_admin(message: Message, state=FSMContext):
     city_text: str = message.text
     match message.text:
         case "Удалить отзыв":
-            await message.answer("Вы выбрали пункт меню удалить")
+            await message.answer(emoji.emojize(":bell: Вы выбрали пункт меню - <b>удалить</b>"), language="en", parse_mode="HTML")
         case "Узнать количество отзывов":
-            await message.answer("Вы выбрали пункт меню - количество отзывов")
+            await message.answer(emoji.emojize(":bell: Вы выбрали пункт меню - <b>количество отзывов</b>"), language="en", parse_mode="HTML")
         case "Уникальный отзыв":
-            await message.answer("Вы выбрали пункт меню - уникальный отзыв")            
+            await message.answer(emoji.emojize(":bell: Вы выбрали пункт меню - <b>уникальный отзыв</b>"), language="en", parse_mode="HTML")
 
 
 @admin_router.message()
@@ -82,7 +82,7 @@ async def process_callback_button(message: Message):
     city_text: str = message.text
     if city_text in all_cities:
         city: str = all_cities.get(message.text)[-1]
-        response_to_user: str = f"Вы выбрали город: {message.text}"
+        response_to_user: str = emoji.emojize(f":bell: Вы выбрали город: <b>{message.text}</b>", language="en", parse_mode="HTML")
         photo = FSInputFile(city)
         await message.answer_photo(photo=photo, caption=response_to_user)
 
@@ -105,4 +105,4 @@ async def weather_data(name_city: str) -> str:
             data_weather_for_user += emoji.emojize(all_text_from_1h[line]) + " " + str(city_weather_data[line]) + "\n\n"
         return data_weather_for_user
     else:
-        return "К сожалению ваш запрос не удался"
+        return emoji.emojize(":cross_mark: К сожалению ваш запрос не удался", language="HTML")
