@@ -1,14 +1,16 @@
-import api
 import bot.text
 import emoji
 
-from aiogram import types, F
+from aiogram import types
 from aiogram.filters.command import Command
 from aiogram.types import FSInputFile
 from bot.keyboards import kb, func_about_city_kb, func_neighbors_cities
-from bot.text import weather_1h, about_of_city, neighbors_city
-from aiogram.fsm.storage import memory
 from aiogram import Router
+from aiogram.fsm.context import FSMContext
+
+from database.services import admin_service
+from bot.keyboards import review_text_butt
+from bot.states import FormAdmin
 
 router = Router()
 
@@ -38,56 +40,17 @@ async def neighbors_cities(message: types.Message):
     await message.answer(message_text, reply_markup=keyboard_neighbors_cities.as_markup(), parse_mode="HTML")
 
 
-@router.callback_query()
-async def callback_response_info_city(callback: types.CallbackQuery):
-    if callback.data.endswith("_btn"):
-        data_city: tuple | None = api.City(callback.data[:-4]).api_get_info_of_city()
-        message_to_user: str = ""
-        if data_city:
+@router.message(Command("review"))
+async def review_command(message: types.Message):
+    await message.reply("Спасибо, что решили оставить нам свой отзыв!\nНапишите пожалуйста ваш отзыв.", reply_markup=review_text_butt().as_markup())
 
-            for line in range(len(about_of_city)):
-                message_to_user += (emoji.emojize(about_of_city[line], language="en") + data_city[line]) + "\n\n"
-            await callback.message.answer(message_to_user)
 
-        else:
-            await callback.message.answer("Вы исчерпали все попытки за сегодня.")
+@router.message(Command("admin"))
+async def admin_command(message: types.Message, state=FSMContext):
+    response_to_admin_table = (await admin_service.get_one_admin(int(message.from_user.id)))[0][-1]
+    if response_to_admin_table.tg_id == (message.from_user.id):
+        await message.answer("Запуск авторизация для админа...")
+        await state.set_state(FormAdmin.password)
+        await message.answer("Введите пожалуйста ваш пароль: ")
     else:
-        all_city_info: list | None = api.CityNeighbors(callback.data[:-4]).get_neighbors_city()
-        message_to_user: str = "Список ближайших городов: \n\n\n"
-        if all_city_info:
-            for city in range(len(all_city_info)):
-                message_to_user += emoji.emojize(neighbors_city + all_city_info[city] + "\n\n", language="en")
-            await callback.message.reply(message_to_user)
-        else:
-            return callback.message.answer("Вы исчерпали все попытки за сегодня.")
-
-
-@router.message()
-async def process_callback_button(message: types.Message):
-    all_cities: dict = api.Weather().get_all_cities()
-    city_text: str = message.text
-    if city_text in all_cities:
-        city: str = all_cities.get(message.text)[-1]
-        response_to_user: str = f"Вы выбрали город: {message.text}"
-        photo = FSInputFile(city)
-        await message.answer_photo(photo=photo, caption=response_to_user)
-
-        result_data: str = await weather_data(city_text)
-        await message.answer(result_data)
-
-async def weather_data(name_city: str) -> str:
-    """
-    Обрабатывает данные о погоде, вывод
-    :return:
-    """
-    forecast_weather: api.Weather = api.Weather()
-    city_weather_data: tuple = forecast_weather.get_city(name_city)
-
-    if city_weather_data:
-        data_weather_for_user: str = ""
-        all_text_from_1h: list = weather_1h.weather_data
-        for line in range(len(all_text_from_1h)):
-            data_weather_for_user += emoji.emojize(all_text_from_1h[line]) + " " + str(city_weather_data[line]) + "\n\n"
-        return data_weather_for_user
-    else:
-        return "К сожалению ваш запрос не удался"
+        await message.answer("Для вас вход в админ панель запрещён")
