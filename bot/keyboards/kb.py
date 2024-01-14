@@ -1,3 +1,5 @@
+import emoji
+
 from api import Weather
 
 from aiogram.types import KeyboardButton, InlineKeyboardButton, ReplyKeyboardMarkup
@@ -6,11 +8,22 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 start_kb = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text=city_name) for city_name in list(Weather().get_all_cities().keys())
+            KeyboardButton(text=emoji.emojize(f":sunset: {city_name}", language="en")) for city_name in list(Weather().get_all_cities().keys())
         ]
     ],
     resize_keyboard=True,
     input_field_placeholder="Локация",
+    one_time_keyboard=True
+)
+
+kb_for_5d = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text=emoji.emojize(f":night_with_stars: {city_name}", language="en")) for city_name in list(Weather().get_all_cities().keys())
+        ]
+    ],
+    resize_keyboard=True,
+    input_field_placeholder="Город",
     one_time_keyboard=True
 )
 
