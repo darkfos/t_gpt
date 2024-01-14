@@ -1,5 +1,5 @@
 <p align="center">
-      ![изображение](https://github.com/darkfos/t_wthr/assets/153763364/7d045877-769d-4600-9a51-cef9e082de29)
+      <imt src="https://github.com/darkfos/t_wthr/assets/153763364/7d045877-769d-4600-9a51-cef9e082de29">
 </p>
 
 <p align="center">
