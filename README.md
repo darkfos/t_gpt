@@ -30,14 +30,14 @@
 
 ## How to install
 <p>Создание виртуального окружения</p>
-'''python
+```python
 python -m venv venv
-'''
+```
 
 <p>Установка всех пакетов</p>
-"""python
+```python
 pip3 install -r requirements.txt
-"""
+```
 
 <p>Нужные Api key</p>
 - [AccuWeather](https://developer.accuweather.com/)
