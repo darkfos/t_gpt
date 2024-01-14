@@ -24,9 +24,15 @@ async def add_one_reviews(id_tg: BigInteger, name_user: str, age_user: int, revi
         await session.commit()
 
 
-async def del_one_reviews(id_tg: BigInteger):
+async def del_one_reviews(id_review: int):
     async with async_session() as session:
-        del_unique_tg_id = await session.execute(delete(Review).where(Review.tg_id == id_tg))
+        del_unique_tg_id = await session.execute(delete(Review).where(Review.id==id_review))
         await session.commit()
+        
+
+async def get_one_review_id(id_review: int):
+    async with async_session() as session:
+        unique_review = await session.execute(select(Review).where(Review.id==id_review))
+        return unique_review.scalar_one_or_none()
 
 
