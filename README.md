@@ -30,8 +30,10 @@
 
 ## How to install
 <p>Создание виртуального окружения</p>
-```python
-  python -m venv venv
+```ruby
+require 'redcarpet'
+markdown = Redcarpet.new("Hello World!")
+puts markdown.to_html
 ```
 
 <p>Установка всех пакетов</p>
