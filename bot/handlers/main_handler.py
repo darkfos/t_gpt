@@ -23,19 +23,19 @@ async def help_command(message: types.Message):
 
 @router.message(Command("start"))
 async def start_command(message: types.Message):
-    await message.answer("Выберите ваш <b>город</b>", reply_markup=kb.start_kb, parse_mode="HTML")
+    await message.answer(emoji.emojize(":bell: Выберите ваш <b>город</b>", language="en"), reply_markup=kb.start_kb, parse_mode="HTML")
 
 
 @router.message(Command("name_city"))
 async def about_city_command(message: types.Message):
-    message_text: str = "Выберите <b>город</b>"
+    message_text: str = emoji.emojize(":bell: Выберите <b>город</b>", language="en")
     keyboard = func_about_city_kb()
     await message.answer(message_text, reply_markup=keyboard.as_markup(), parse_mode="HTML")
 
 
 @router.message(Command("neighbors"))
 async def neighbors_cities(message: types.Message):
-    message_text: str = "Выберите интересующий ваc <b>город</b>"
+    message_text: str = emoji.emojize(":bell: Выберите интересующий ваc <b>город</b>", language="en")
     keyboard_neighbors_cities = func_neighbors_cities()
     await message.answer(message_text, reply_markup=keyboard_neighbors_cities.as_markup(), parse_mode="HTML")
 
@@ -44,6 +44,10 @@ async def neighbors_cities(message: types.Message):
 async def review_command(message: types.Message):
     await message.reply("Спасибо, что решили оставить нам свой отзыв!\nНапишите пожалуйста ваш отзыв.", reply_markup=review_text_butt().as_markup())
 
+
+@router.message(Command("weather_5d"))
+async def weather_5d(message: types.Message):
+    await message.answer(emoji.emojize(":bell: Выберите город для прогноза на следующие <b>5 дней.</b>", language="en"), parse_mode="HTML", reply_markup=kb.kb_for_5d)
 
 @router.message(Command("admin"))
 async def admin_command(message: types.Message, state=FSMContext):
