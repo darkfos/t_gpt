@@ -42,7 +42,10 @@ pip3 install -r requirements.txt
 ```
 
 <p>Нужные Api key</p>
+
 - [AccuWeather](https://developer.accuweather.com/)
+  
 <p>Так же понадобится API key от Telegram</p>
+
 - [BotFather](https://t.me/BotFather)
 
