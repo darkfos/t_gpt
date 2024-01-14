@@ -1,5 +1,6 @@
 import api
 import emoji
+import random
 
 from aiogram import F, Router
 from aiogram.types import Message, CallbackQuery
@@ -22,7 +23,7 @@ async def password_admin(message: Message, state=FSMContext):
     if response_to_admin_table.password == password_admin:
         await message.answer(emoji.emojize(":check_mark_button: Успешно. Добро пожаловать в админ панель %s" % message.from_user.full_name), language="en")
         await state.set_state(FormAdmin.sel_option)
-        await message.answer(emoji.emojize(":scroll: Выберите пункт <b>меню</b> %s" % message.from_user.full_name, reply_markup=get_admin_bt()), language="en", parse_mode="HTML")
+        await message.answer(emoji.emojize(":scroll: Выберите пункт <b>меню</b> %s" % message.from_user.full_name, language="en"), reply_markup=get_admin_bt(), parse_mode="HTML")
     else:
         await message.answer(":cross_mark: Пароль <u>неверен</u>", language="en", parse_mode="HTML")
 
@@ -52,7 +53,7 @@ async def review_text_from_user(message: Message, state: FSMContext):
         await state.clear()
         data_for_user: list = [state_data.get(key) for key in state_data.keys()]
         data_for_user.insert(0, message.from_user.id)
-        review_obj: tuple = data_for_user[0], data_for_user[-1], data_for_user[1], data_for_user[2]
+        review_obj: tuple = data_for_user[0], data_for_user[2], data_for_user[1], data_for_user[-1]
         result = await review_service.get_one_reviews(data_for_user[0])
         if len(result) == 0:
             await review_service.add_one_reviews(*review_obj)
@@ -67,13 +68,36 @@ async def review_text_from_user(message: Message, state: FSMContext):
 async def sel_option_admin(message: Message, state=FSMContext):
     all_cities: dict = api.Weather().get_all_cities()
     city_text: str = message.text
+    all_record_review = await review_service.get_all_reviews()
     match message.text:
         case "Удалить отзыв":
-            await message.answer(emoji.emojize(":bell: Вы выбрали пункт меню - <b>удалить</b>"), language="en", parse_mode="HTML")
+            await message.answer(emoji.emojize(":bell: Вы выбрали пункт меню - <b>удалить</b>\nПожалуйста введите id отзыва, который хотите удалить"), language="en", parse_mode="HTML")
+            await state.set_state(FormAdmin.sel_point)
         case "Узнать количество отзывов":
             await message.answer(emoji.emojize(":bell: Вы выбрали пункт меню - <b>количество отзывов</b>"), language="en", parse_mode="HTML")
+            await message.answer("<b>Ждите.</b> Операция выполняется", parse_mode="HTML")
+            await message.answer(f"<b>Количество отзывов:</b> {len(all_record_review)}", parse_mode="HTML")
         case "Уникальный отзыв":
             await message.answer(emoji.emojize(":bell: Вы выбрали пункт меню - <b>уникальный отзыв</b>"), language="en", parse_mode="HTML")
+            await message.answer("<b>Ждите.</b> Операция выполняется", parse_mode="HTML")
+            random_review = random.choice(all_record_review)
+            await message.answer(
+                f"<b>Имя:</b> {random_review.name}\n<b>Возраст:</b> {random_review.age}\n<b>Текст:</b> {random_review.review_text}\n<b>ID</b>: {random_review.id}\n<b>ID_telegram</b>: {random_review.tg_id}", parse_mode="HTML"
+            )
+
+
+@admin_router.message(FormAdmin.sel_point)
+async def sel_point(message: Message, state=FSMContext):
+    unique_record_review = await review_service.get_one_review_id(int(message.text))
+    print(unique_record_review)
+    if unique_record_review:
+        try:
+            await review_service.del_one_reviews(int(message.text))
+            await message.reply("Запись была удалена.")
+        except Exception:
+            await message.reply("Внутренняя ошибка, неудалось удалить запись.")
+    else:
+        await message.reply("Такой записи нет.")
 
 
 @admin_router.message()
@@ -82,9 +106,9 @@ async def process_callback_button(message: Message):
     city_text: str = message.text
     if city_text in all_cities:
         city: str = all_cities.get(message.text)[-1]
-        response_to_user: str = emoji.emojize(f":bell: Вы выбрали город: <b>{message.text}</b>", language="en", parse_mode="HTML")
+        response_to_user: str = emoji.emojize(f":bell: Вы выбрали город: <b>{message.text}</b>", language="en")
         photo = FSInputFile(city)
-        await message.answer_photo(photo=photo, caption=response_to_user)
+        await message.answer_photo(photo=photo, caption=response_to_user,  parse_mode="HTML")
 
         result_data: str = await weather_data(city_text)
         await message.answer(result_data)
