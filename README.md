@@ -1,6 +1,4 @@
-<p align="center">
-      ![Иллюстрация к проекту](https://github.com/darkfos/t_wthr/blob/main/Screenshot_1.png)
-</p>
+![Иллюстрация к проекту](https://github.com/darkfos/t_wthr/blob/main/Screenshot_1.png)
 
 ## About
 
