@@ -31,7 +31,7 @@
 ## How to install
 <p>Создание виртуального окружения</p>
 ```python
-python -m venv venv
+  python -m venv venv
 ```
 
 <p>Установка всех пакетов</p>
