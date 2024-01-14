@@ -29,5 +29,18 @@
 - [darkfos](https://github.com/darkfos)
 
 ## How to install
+<p>Создание виртуального окружения</p>
+'''python
+python -m venv venv
+'''
 
+<p>Установка всех пакетов</p>
+"""python
+pip3 install -r requirements.txt
+"""
+
+<p>Нужные Api key</p>
+- [AccuWeather](https://developer.accuweather.com/)
+<p>Так же понадобится API key от Telegram</p>
+- [BotFather](https://t.me/BotFather)
 
