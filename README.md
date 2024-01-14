@@ -1,5 +1,5 @@
 <p align="center">
-      ![Image alt](https://github.com/darkfos/t_wthr/Screenshot_1.png)
+      ![Иллюстрация к проекту](https://github.com/darkfos/t_wthr/edit/main/Screenshot_1.png)
 </p>
 
 <p align="center">
