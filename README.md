@@ -1,5 +1,5 @@
 <p align="center">
-      ![Иллюстрация к проекту](https://github.com/darkfos/t_wthr/assets/153763364/78704b0f-3087-4a42-9314-3522e71cfb61)
+      ![Image alt](https://github.com/darkfos/t_wthr/assets/153763364/78704b0f-3087-4a42-9314-3522e71cfb61)
 </p>
 
 <p align="center">
