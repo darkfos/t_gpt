@@ -6,6 +6,7 @@ from bot.handlers import router
 from bot.handlers.callback_handler import fsm_router
 from bot.handlers import admin_router
 from aiogram import Dispatcher, Bot
+from aiogram.fsm.storage.memory import MemoryStorage
 from database import create_db, admin_service
 
 
@@ -15,7 +16,8 @@ async def run_project():
 
     # Бот
     weather_bot = Bot(token=config.TG_API_KEY)
-    dp_w = Dispatcher(bot=weather_bot)
+    storage = MemoryStorage()
+    dp_w = Dispatcher(bot=weather_bot, storage=storage)
     dp_w.include_routers(
         router,
         admin_router,
